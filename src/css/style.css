@@ -1,0 +1,95 @@
+.background {
+  background: #310062;
+}
+
+#desktop-logo {
+  height: 72px;
+  border-bottom: 1px solid #491979;
+  padding: 12px 16px 0;
+}
+
+#desktopHeader {
+  background-color: #FFF;
+  height: 72px;
+}
+
+.font {
+  font-family: Inter, sans-serif;
+}
+
+.font-h1 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  color: #101828;
+}
+
+.font-h2 {
+  font-size: 18px;
+  color: #101828;
+  line-height: normal;
+  font-weight: 600;
+}
+
+.font-h3 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #667085;
+}
+
+.card {
+  gap: 8px;
+  border-radius: 8px;
+  margin-right: 24px
+}
+
+.card-mobile {
+  gap: 8px;
+  border-radius: 8px;
+}
+
+.card-content-padding {
+  padding: 20px 22px;
+}
+
+.card-img-size {
+  width: 56px;
+  height: 56px;
+}
+
+.echarts {
+  width: 500px;
+  height: 440px;
+}
+
+.echarts-mobile {
+  width: 350px;
+  height: 320px;
+}
+
+.echarts-card {
+  margin-top: 24px;
+  margin-right: 24px;
+}
+
+#select {
+  color: #9C27B0;
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#header {
+  border-right: 1px solid #491979;
+  height: 56px;
+}
+
+.img {
+  width: 24px;
+  height: 24px
+}
+
+#logo {
+  margin-top: 6px;
+  margin-bottom: 0;
+}
