@@ -145,7 +145,7 @@
             <q-select id="select" borderless v-model="selectedOption" :options="options"
                       style="display: inline-block;"/>
             <q-card-section class="q-pa-none">
-              <div class="echarts-mobile" id="day-sales-id"></div>
+              <div class="echarts-mobile" id="mobile-echarts"></div>
             </q-card-section>
           </q-card>
         </q-page>
@@ -155,7 +155,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from "vue";
+import {ref, onMounted, watch} from "vue";
 import {useQuasar} from "quasar";
 import * as echarts from "echarts"
 import {useDaySalesStore} from "stores/daySales";
@@ -170,7 +170,8 @@ const drawerLeft = ref(false);
 const info = ref({products: "14 360 601", catalogs: "3069", brands: "352 335", sellers: "47 246"});
 
 const options = ["дням", "месяцам"];
-const selectedOption = ref(options[0]);
+const selectedOption = ref(options[0])
+const store = useDaySalesStore();
 
 async function api() {
   return new Promise(resolve => {
@@ -180,52 +181,71 @@ async function api() {
   });
 }
 
-onMounted(async () => {
-    const store = useDaySalesStore();
-    store.daySales = await api();
-
-    echarts.init(document.getElementById("day-sales-id")).setOption({
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-      },
-      yAxis: {
-        type: "value"
-      },
-      series: [
-        {
-          data: store.daySales,
-          type: "line",
-          areaStyle: {
-            opacity: 0.3
-          }
-        }
-      ]
-    });
-
-    const monthSalesElement = document.getElementById("month-sales-id");
-    if (monthSalesElement) {
-      echarts.init(monthSalesElement).setOption({
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: [820, 932, 901, 934, 1290, 1330],
-            type: "line",
-            areaStyle: {
-              opacity: 0.3
-            }
-          }
-        ]
-      });
-    }
+watch(selectedOption, () => {
+  const domElement = document.getElementById("mobile-echarts");
+  if (selectedOption.value === options[0]) {
+    showDaySalesSchedule({domElement: domElement});
   }
-)
+
+  if (selectedOption.value === options[1]) {
+    showMonthSalesSchedule({domElement: domElement});
+  }
+})
+
+function showDaySalesSchedule({domElement}: { domElement: any }) {
+  echarts.init(domElement).setOption({
+    xAxis: {
+      type: "category",
+      boundaryGap: false,
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    yAxis: {
+      type: "value"
+    },
+    series: [
+      {
+        data: store.daySalesData,
+        type: "line",
+        areaStyle: {
+          opacity: 0.3
+        }
+      }
+    ]
+  });
+}
+
+function showMonthSalesSchedule({domElement}: { domElement: any }) {
+  echarts.init(domElement).setOption({
+    xAxis: {
+      type: "category",
+      boundaryGap: false,
+      data: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+    },
+    yAxis: {
+      type: "value"
+    },
+    series: [
+      {
+        data: [820, 932, 901, 934, 1290, 1330],
+        type: "line",
+        areaStyle: {
+          opacity: 0.3
+        }
+      }
+    ]
+  });
+}
+
+onMounted(async () => {
+  store.daySalesData = await api();
+
+  if ($q.platform.is.desktop) {
+    showMonthSalesSchedule({domElement: document.getElementById("month-sales-id")});
+    showDaySalesSchedule({domElement: document.getElementById("day-sales-id")});
+  }
+
+  if ($q.platform.is.mobile) {
+    showDaySalesSchedule({domElement: document.getElementById("mobile-echarts")});
+  }
+})
 </script>

@@ -1,10 +1,10 @@
-import {defineStore} from 'pinia';
+import {defineStore} from "pinia";
 import {ref} from "vue";
 
-export const useDaySalesStore = defineStore('daySales', () => {
-  const daySales = ref([]);
+export const useDaySalesStore = defineStore('daySalesStore', () => {
+  const daySalesData = ref([]);
 
-  return {daySales};
+  return {daySalesData};
 });
 
 
